@@ -1,6 +1,25 @@
+server:
+  port: 5000
+
 spring:
   application:
     name: challenge-java-developer
-
-server:
-  port: 5000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/challenge_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: validate
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+    format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
