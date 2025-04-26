@@ -1,5 +1,6 @@
 package br.com.neurotech.challenge.service;
 
+import br.com.neurotech.challenge.dto.ClientDto;
 import br.com.neurotech.challenge.dto.CreditResponseDto;
 import br.com.neurotech.challenge.dto.CreditStatus;
 import br.com.neurotech.challenge.entity.Credit;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -82,5 +84,10 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Optional<Credit> get(UUID id) {
         return creditRepository.findById(id);
+    }
+
+    @Override
+    public List<ClientDto> findSpecialClientsForHatchCredit() {
+        return creditRepository.findSpecialClientsForHatchCredit();
     }
 }

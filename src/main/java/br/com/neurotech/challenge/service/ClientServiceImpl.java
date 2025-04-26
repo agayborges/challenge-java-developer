@@ -1,10 +1,12 @@
 package br.com.neurotech.challenge.service;
 
+import br.com.neurotech.challenge.dto.ClientDto;
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

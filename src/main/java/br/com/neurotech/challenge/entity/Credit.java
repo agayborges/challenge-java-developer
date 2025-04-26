@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -15,7 +16,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "credits")
+@Table(name = "credits", indexes = {
+        @Index(name = "idx_credit_fee_type", columnList = "fee_type"),
+        @Index(name = "idx_credit_client_id", columnList = "client_id"),
+})
 public class Credit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

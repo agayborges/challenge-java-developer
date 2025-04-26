@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +16,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "clients")
+@Table(name = "clients", indexes = {
+		@Index(name = "idx_client_age", columnList = "age"),
+		@Index(name = "idx_client_income", columnList = "income"),
+})
 public class NeurotechClient {
 
 	@Id
