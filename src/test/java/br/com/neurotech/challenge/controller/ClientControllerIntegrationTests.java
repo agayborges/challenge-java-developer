@@ -1,7 +1,9 @@
 package br.com.neurotech.challenge.controller;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
+import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.service.ClientService;
+import br.com.neurotech.challenge.service.CreditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +35,10 @@ public class ClientControllerIntegrationTests {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private ClientService service;
+    private ClientService clientservice;
+
+    @MockBean
+    private CreditService creditService;
 
     private final UUID clientId = UUID.randomUUID();
     private final NeurotechClient client = new NeurotechClient(clientId, "Mocked Name", (short) 25, 10000.00);
@@ -40,7 +46,7 @@ public class ClientControllerIntegrationTests {
     @Test
     void create_ShouldReturnCreatedStatus() throws Exception {
         // Arrange
-        when(service.save(any(NeurotechClient.class))).thenReturn(clientId);
+        when(clientservice.save(any(NeurotechClient.class))).thenReturn(clientId);
 
         // Act & Assert
         mockMvc.perform(post("/api/client")
@@ -54,7 +60,7 @@ public class ClientControllerIntegrationTests {
     @Test
     void get_WithExistingId_ShouldReturnClient() throws Exception {
         // Arrange
-        when(service.get(clientId)).thenReturn(Optional.of(client));
+        when(clientservice.get(clientId)).thenReturn(Optional.of(client));
 
         // Act & Assert
         mockMvc.perform(get("/api/client/{id}", clientId))
@@ -68,10 +74,83 @@ public class ClientControllerIntegrationTests {
     @Test
     void get_WithNonExistingId_ShouldReturnNotFound() throws Exception {
         // Arrange
-        when(service.get(clientId)).thenReturn(Optional.empty());
+        when(clientservice.get(clientId)).thenReturn(Optional.empty());
 
         // Act & Assert
         mockMvc.perform(get("/api/client/{id}", clientId))
                 .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnNotFound() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.HATCH))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnFalse() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.of(false));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.HATCH))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isBoolean())
+                .andExpect(jsonPath("$").value(false));
+    }
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnTrue() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.of(true));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.HATCH))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isBoolean())
+                .andExpect(jsonPath("$").value(true));
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnNotFound() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.SUV))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnFalse() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.of(false));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.SUV))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isBoolean())
+                .andExpect(jsonPath("$").value(false));
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnTrue() throws Exception {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.of(true));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/client/{id}/check-credit/{model}", clientId, VehicleModel.SUV))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isBoolean())
+                .andExpect(jsonPath("$").value(true));
     }
 }

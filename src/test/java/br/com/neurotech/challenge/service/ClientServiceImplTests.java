@@ -28,7 +28,7 @@ public class ClientServiceImplTests {
     @InjectMocks
     private ClientServiceImpl service;
 
-    private NeurotechClient neurotechClient = new NeurotechClient(UUID.randomUUID(), "Moked Client", (short) 35, 10000.00);
+    private NeurotechClient neurotechClient = new NeurotechClient(UUID.randomUUID(), "Mocked Client", (short) 35, 10000.00);
     private final UUID clientId = UUID.randomUUID();
 
 

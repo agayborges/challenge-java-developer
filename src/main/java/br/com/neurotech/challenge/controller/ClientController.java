@@ -1,7 +1,9 @@
 package br.com.neurotech.challenge.controller;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
+import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.service.ClientService;
+import br.com.neurotech.challenge.service.CreditService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,15 +21,18 @@ import java.util.UUID;
 @RequestMapping("/api/client")
 public class ClientController {
 
-    private final ClientService service;
+    private final ClientService clientService;
 
-    public ClientController(ClientService service) {
-        this.service = service;
+    private final CreditService creditService;
+
+    public ClientController(ClientService clientService, CreditService creditService) {
+        this.clientService = clientService;
+        this.creditService = creditService;
     }
 
     @PostMapping
     public ResponseEntity createClient(@RequestBody NeurotechClient requestClient) {
-        UUID clientId = service.save(requestClient);
+        UUID clientId = clientService.save(requestClient);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(clientId.toString())
@@ -37,8 +42,15 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<NeurotechClient> findById(@PathVariable UUID id) {
-        Optional<NeurotechClient> client = service.get(id);
+        Optional<NeurotechClient> client = clientService.get(id);
         return client.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/check-credit/{vehicleModel}")
+    public ResponseEntity<Boolean> checkCredit(@PathVariable UUID id, @PathVariable VehicleModel vehicleModel) {
+        Optional<Boolean> checkCredit = creditService.checkCredit(id, vehicleModel);
+        return checkCredit.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 

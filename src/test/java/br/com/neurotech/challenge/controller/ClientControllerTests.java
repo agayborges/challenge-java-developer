@@ -1,7 +1,9 @@
 package br.com.neurotech.challenge.controller;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
+import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.service.ClientServiceImpl;
+import br.com.neurotech.challenge.service.CreditServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,8 +20,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +32,10 @@ import static org.mockito.Mockito.when;
 public class ClientControllerTests {
 
     @Mock
-    private ClientServiceImpl service;
+    private ClientServiceImpl clientService;
+
+    @Mock
+    private CreditServiceImpl creditService;
 
     @InjectMocks
     private ClientController controller;
@@ -47,7 +54,7 @@ public class ClientControllerTests {
         newClient.setName("Test Name");
         newClient.setAge((short) 2);
         newClient.setIncome(0.0);
-        when(service.save(newClient)).thenReturn(clientId);
+        when(clientService.save(newClient)).thenReturn(clientId);
 
         // Act
         ResponseEntity response = controller.createClient(newClient);
@@ -58,13 +65,13 @@ public class ClientControllerTests {
         URI expectedLocation = URI.create("http://localhost/" + clientId.toString());
         assertNotNull(response.getHeaders().getLocation());
         assertEquals(expectedLocation, response.getHeaders().getLocation());
-        verify(service, times(1)).save(newClient);
+        verify(clientService, times(1)).save(newClient);
     }
 
     @Test
     void get_WithExistingId_ShouldReturnClient() {
         // Arrange
-        when(service.get(clientId)).thenReturn(Optional.of(client));
+        when(clientService.get(clientId)).thenReturn(Optional.of(client));
 
         // Act
         ResponseEntity<NeurotechClient> response = controller.findById(clientId);
@@ -72,13 +79,13 @@ public class ClientControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(client, response.getBody());
-        verify(service, times(1)).get(clientId);
+        verify(clientService, times(1)).get(clientId);
     }
 
     @Test
     void get_WithNonExistingId_ShouldReturnNotFound() {
         // Arrange
-        when(service.get(clientId)).thenReturn(Optional.empty());
+        when(clientService.get(clientId)).thenReturn(Optional.empty());
 
         // Act
         ResponseEntity<NeurotechClient> response = controller.findById(clientId);
@@ -86,7 +93,91 @@ public class ClientControllerTests {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
-        verify(service, times(1)).get(clientId);
+        verify(clientService, times(1)).get(clientId);
+    }
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnNotFound() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.HATCH);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.HATCH);
+    }
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnFalse() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.of(false));
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.HATCH);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertFalse(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.HATCH);
+    }
+
+    @Test
+    void checkCredit_WithHatch_ShouldReturnTrue() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(Optional.of(true));
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.HATCH);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.HATCH);
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnNotFound() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.SUV);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.SUV);
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnFalse() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.of(false));
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.SUV);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertFalse(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.SUV);
+    }
+
+    @Test
+    void checkCredit_WithSuv_ShouldReturnTrue() {
+        // Arrange
+        when(creditService.checkCredit(clientId, VehicleModel.SUV)).thenReturn(Optional.of(true));
+
+        // Act
+        ResponseEntity<Boolean> response = controller.checkCredit(clientId, VehicleModel.SUV);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody());
+        verify(creditService, times(1)).checkCredit(clientId, VehicleModel.SUV);
     }
 
 }
