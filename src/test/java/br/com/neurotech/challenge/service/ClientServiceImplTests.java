@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class ClientServiceImplTests {
     @InjectMocks
     private ClientServiceImpl service;
 
-    private NeurotechClient neurotechClient = new NeurotechClient(UUID.randomUUID(), "Mocked Client", (short) 35, 10000.00);
+    private final NeurotechClient neurotechClient = new NeurotechClient(UUID.randomUUID(), "Mocked Client", (short) 35, BigDecimal.valueOf(10000.00));
     private final UUID clientId = UUID.randomUUID();
 
 
@@ -66,7 +67,7 @@ public class ClientServiceImplTests {
         NeurotechClient newClient = new NeurotechClient();
         newClient.setAge((short) 25);
         newClient.setName("Test Name");
-        newClient.setIncome(2500.00);
+        newClient.setIncome(BigDecimal.valueOf(2500.00));
 
         when(repository.save(newClient)).thenAnswer(invocation -> {
             NeurotechClient argument = invocation.getArgument(0);

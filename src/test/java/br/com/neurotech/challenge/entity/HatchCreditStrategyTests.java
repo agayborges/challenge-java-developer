@@ -2,6 +2,7 @@ package br.com.neurotech.challenge.entity;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
 
@@ -12,13 +13,13 @@ public class HatchCreditStrategyTests {
 
     @Test
     void checkCredit_WithLowIncome_ShouldReturnFalse() {
-        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, 4999.99);
+        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, BigDecimal.valueOf(4999.99));
         assertFalse(VehicleModel.HATCH.checkCredit(client));
     }
 
     @Test
     void checkCredit_WithHighIncome_ShouldReturnFalse() {
-        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, 15000.01);
+        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, BigDecimal.valueOf(15000.01));
         assertFalse(VehicleModel.HATCH.checkCredit(client));
     }
 
@@ -29,7 +30,7 @@ public class HatchCreditStrategyTests {
         Random random = new Random();
         double randomValue = random.nextDouble(min, max);
 
-        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, randomValue);
+        NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Name", (short) 25, BigDecimal.valueOf(randomValue));
         assertTrue(VehicleModel.HATCH.checkCredit(client));
     }
 

@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class ClientControllerTests {
     @InjectMocks
     private ClientController controller;
 
-    private NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Client", (short) 25, 10000.00);
+    private final NeurotechClient client = new NeurotechClient(UUID.randomUUID(), "Mocked Client", (short) 25, BigDecimal.valueOf(10000.00));
     private final UUID clientId = UUID.randomUUID();
 
     @Test
@@ -53,7 +54,7 @@ public class ClientControllerTests {
         NeurotechClient newClient = new NeurotechClient();
         newClient.setName("Test Name");
         newClient.setAge((short) 2);
-        newClient.setIncome(0.0);
+        newClient.setIncome(BigDecimal.valueOf(0.0));
         when(clientService.save(newClient)).thenReturn(clientId);
 
         // Act
@@ -62,7 +63,7 @@ public class ClientControllerTests {
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-        URI expectedLocation = URI.create("http://localhost/" + clientId.toString());
+        URI expectedLocation = URI.create("http://localhost/" + clientId);
         assertNotNull(response.getHeaders().getLocation());
         assertEquals(expectedLocation, response.getHeaders().getLocation());
         verify(clientService, times(1)).save(newClient);

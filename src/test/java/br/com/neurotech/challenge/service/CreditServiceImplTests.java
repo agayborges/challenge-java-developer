@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,7 +29,6 @@ public class CreditServiceImplTests {
     private CreditServiceImpl service;
 
     private final UUID clientId = UUID.randomUUID();
-    private NeurotechClient neurotechClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, 10000.00);
 
     @Test
     void checkCredit_WithHatch_ShouldReturnEmpty() {
@@ -45,7 +45,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithHatchLowIncome_ShouldReturnFalse() {
-        NeurotechClient lowIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, 4000.00);
+        NeurotechClient lowIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, BigDecimal.valueOf(4000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(lowIncomeClient));
 
@@ -60,7 +60,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithHatchHighIncome_ShouldReturnFalse() {
-        NeurotechClient highIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, 16000.00);
+        NeurotechClient highIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, BigDecimal.valueOf(16000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(highIncomeClient));
 
@@ -75,7 +75,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithHatch_ShouldReturnTrue() {
-        NeurotechClient client = new NeurotechClient(clientId, "Mocked Client", (short) 35, 7000.00);
+        NeurotechClient client = new NeurotechClient(clientId, "Mocked Client", (short) 35, BigDecimal.valueOf(7000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(client));
 
@@ -103,7 +103,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithSuvLowIncome_ShouldReturnFalse() {
-        NeurotechClient lowIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, 4000.00);
+        NeurotechClient lowIncomeClient = new NeurotechClient(clientId, "Mocked Client", (short) 35, BigDecimal.valueOf(4000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(lowIncomeClient));
 
@@ -118,7 +118,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithSuvLowAge_ShouldReturnFalse() {
-        NeurotechClient lowAgeClient = new NeurotechClient(clientId, "Mocked Client", (short) 15, 16000.00);
+        NeurotechClient lowAgeClient = new NeurotechClient(clientId, "Mocked Client", (short) 15, BigDecimal.valueOf(16000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(lowAgeClient));
 
@@ -133,7 +133,7 @@ public class CreditServiceImplTests {
 
     @Test
     void checkCredit_WithSuv_ShouldReturnTrue() {
-        NeurotechClient client = new NeurotechClient(clientId, "Mocked Client", (short) 35, 100000.00);
+        NeurotechClient client = new NeurotechClient(clientId, "Mocked Client", (short) 35, BigDecimal.valueOf(100000.00));
         // Arrange
         when(repository.findById(clientId)).thenReturn(Optional.of(client));
 

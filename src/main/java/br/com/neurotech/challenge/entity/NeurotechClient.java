@@ -5,7 +5,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -15,14 +21,22 @@ public class NeurotechClient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
+
+	@NotBlank(message = "O nome do cliente é obrigatório")
+	@Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
 	private String name;
+
+	@NotNull(message = "A idade é obrigatória")
+	@PositiveOrZero(message = "A idade deve ser maior ou igual a zero")
 	private Short age;
 
-	private Double income;
+	@NotNull(message = "A renda é obrigatória")
+	@Digits(integer = 10, fraction = 2, message = "A renda deve ter no máximo 10 dígitos inteiros e 2 decimais")
+	private BigDecimal income;
 
 	public NeurotechClient() {}
 
-	public NeurotechClient(UUID id, String name, Short age, Double income) {
+	public NeurotechClient(UUID id, String name, Short age, BigDecimal income) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
@@ -53,11 +67,11 @@ public class NeurotechClient {
 		this.age = age;
 	}
 
-	public Double getIncome() {
+	public BigDecimal getIncome() {
 		return income;
 	}
 
-	public void setIncome(Double income) {
+	public void setIncome(BigDecimal income) {
 		this.income = income;
 	}
 }

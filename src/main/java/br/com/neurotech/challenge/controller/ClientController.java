@@ -4,6 +4,7 @@ import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity createClient(@RequestBody NeurotechClient requestClient) {
+    public ResponseEntity createClient(@RequestBody @Valid NeurotechClient requestClient) {
         UUID clientId = clientService.save(requestClient);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")

@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class ClientControllerIntegrationTests {
     private CreditService creditService;
 
     private final UUID clientId = UUID.randomUUID();
-    private final NeurotechClient client = new NeurotechClient(clientId, "Mocked Name", (short) 25, 10000.00);
+    private final NeurotechClient client = new NeurotechClient(clientId, "Mocked Name", (short) 25, BigDecimal.valueOf(10000.00));
 
     @Test
     void create_ShouldReturnCreatedStatus() throws Exception {
