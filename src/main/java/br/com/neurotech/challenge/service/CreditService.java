@@ -1,5 +1,7 @@
 package br.com.neurotech.challenge.service;
 
+import br.com.neurotech.challenge.dto.CreditResponseDto;
+import br.com.neurotech.challenge.entity.Credit;
 import org.springframework.stereotype.Service;
 
 import br.com.neurotech.challenge.entity.VehicleModel;
@@ -15,5 +17,8 @@ public interface CreditService {
 	 * para um determinado modelo de veículo
 	 */
 	Optional<Boolean> checkCredit(UUID clientId, VehicleModel model);
-	
+
+	CreditResponseDto requestCredit(UUID clientId, VehicleModel model);
+
+	Optional<Credit> get(UUID id);
 }

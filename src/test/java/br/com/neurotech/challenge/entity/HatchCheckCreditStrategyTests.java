@@ -9,7 +9,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HatchCreditStrategyTests {
+public class HatchCheckCreditStrategyTests {
 
     @Test
     void checkCredit_WithLowIncome_ShouldReturnFalse() {

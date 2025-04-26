@@ -1,17 +1,17 @@
 package br.com.neurotech.challenge.entity;
 
 public enum VehicleModel {
-	HATCH(new HatchCreditStrategy()),
-	SUV(new SuvCreditStrategy());
+	HATCH(new HatchCheckCreditStrategy()),
+	SUV(new SuvCheckCreditStrategy());
 
-	private final CreditStrategy creditStrategy;
+	private final CheckCreditStrategy checkCreditStrategy;
 
-	VehicleModel(CreditStrategy creditStrategy) {
-		this.creditStrategy = creditStrategy;
+	VehicleModel(CheckCreditStrategy checkCreditStrategy) {
+		this.checkCreditStrategy = checkCreditStrategy;
 	}
 
 	public boolean checkCredit(NeurotechClient neurotechClient) {
-		return creditStrategy.checkCredit(neurotechClient);
+		return checkCreditStrategy.checkCredit(neurotechClient);
 	}
 
 }

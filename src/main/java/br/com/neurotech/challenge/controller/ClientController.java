@@ -54,5 +54,4 @@ public class ClientController {
         return checkCredit.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 }

@@ -2,7 +2,7 @@ package br.com.neurotech.challenge.entity;
 
 import java.math.BigDecimal;
 
-public class HatchCreditStrategy implements CreditStrategy {
+public class HatchCheckCreditStrategy implements CheckCreditStrategy {
 
     private static final BigDecimal FLOOR_INCOME = new BigDecimal(5000);
     private static final BigDecimal ROOF_INCOME = new BigDecimal(15000);

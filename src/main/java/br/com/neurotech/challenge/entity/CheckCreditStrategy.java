@@ -1,5 +1,7 @@
 package br.com.neurotech.challenge.entity;
 
-public interface CreditStrategy {
+import java.math.BigDecimal;
+
+public interface CheckCreditStrategy {
     boolean checkCredit(NeurotechClient client);
 }
